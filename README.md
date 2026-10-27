@@ -13,7 +13,8 @@ Noah Holloway - Project Lead, 6th Semester RCET Student
 Rudy Earnest - Project Lead, 6th Semester RCET Student
 : Pan-Tilt-Zoom (PTZ) Cameras and other peripherals
 
-Micah Spencer - Project assistant, 5th Semester RCET Student
+Micah Spencer
+: Project assistant, 5th Semester RCET Student
 : Real-Time Kinematics (RTK)/GPS Module
 
 Jonas Cram - Project Assistant, 5th Semester RCET Student
