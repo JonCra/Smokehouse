@@ -1,7 +1,14 @@
+/*
+    Jonas Cram
+     Robotics and Communication Systems Engineering Technology (RCET)
+     College of Technology - Idaho State University
+     
+    Project Smokehouse
+     
+ */
+    
 ; PIC16F1788 Configuration Bit Settings
-
 ; Assembly source line config statements
-
 ; CONFIG1
   CONFIG  FOSC = XT             ; Oscillator Selection (XT Oscillator, Crystal/resonator connected between OSC1 and OSC2 pins)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
@@ -27,6 +34,11 @@
 // config statements should precede project file includes.
 #include <xc.inc>
   
+PSECT resetVect,class=CODE,delta=2
+    GOTO SETUP
+PSECT isrVect,class=CODE,delta=2
+    GOTO IE_HANDLER
+  
 SETUP:
     
     GOTO MAIN
@@ -36,5 +48,9 @@ MAIN:
     END
     
 SUBROUTINES:
+    
+    RETURN
+    
+IE_Handler:
     
     RETFIE
