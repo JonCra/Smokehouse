@@ -7,6 +7,7 @@
 <dt>Jonas Cram - Project Lead, 6th Semester RCET Student</dt>
 <dd>Design and construction of "control/base station" for remote operations</dd>
 </dl>
+
 ### BLOODHOUND Contributors (Spring 2026 Semester)
 <dl>
 <dt>Noah Holloway - Project Lead, 6th Semester RCET Student</dt>
