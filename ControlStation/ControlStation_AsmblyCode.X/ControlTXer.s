@@ -40,6 +40,54 @@ PSECT isrVect,class=CODE,delta=2
     GOTO IE_HANDLER
   
 SETUP:
+    ; -------------------
+    ; Register Setup
+    ; -------------------
+    STATUS_TEMP EQU 0x70h	; INIT TEMP STATUS REG
+	CLRF	STATUS_TEMP	; CLR REG
+	
+    W_TEMP	EQU 0x71h	; INIT TEMP W REG
+	CLRF	W_TEMP		; CLR REG
+	
+    RX_TEMP	EQU 0x72h	; INIT TEMP Rx PORT REG
+	CLRF	RX_TEMP		; CLR REG
+
+    ; -------------------
+    ; UART SETUP
+    ; -------------------
+    BANKSEL	TXSTA
+	MOVLW	0_000110B
+	/*
+	 BITS FOR ASYNC MODE
+	 7 - NA
+	 6 - 1(9b Tx) / 0(8b Tx)
+	 5 - 1(Tx ENBL) / 0(Tx DSBL)
+	 4 - 1(SYNC MODE) / 0(ASYNC MODE)
+	 3 - 1(SEND SYNC BREAK) / 0(SYNC BREAK Tx CMPLT)
+	 2 - 1(HI SPD) / 0(LO SPD)
+	 1 - 1(Tx SHFT REG EMPT) / 0(Tx SHFT REG FULL)
+	 0 - (NINTH BIT OF Tx DAT; CAN BE ADDRESS/DAT OR PARITY BIT)
+	*/
+	MOVWF	TXSTA
+    
+    ; -------------------
+    ; PORTC SETUP
+    ; -------------------
+    BANKSEL	PORTC
+	CLRF	PORTC		; CLR PORTC
+    BANKSEL	TRISC
+	MOVLW	
+	/*
+	 0 - 
+	 1 - 
+	 2 - 
+	 3 - 
+	 4 - 
+	 5 - 
+	 6 - 
+	 7 - 
+	*/
+	MOVWF	TRISC
     
     GOTO MAIN
     
@@ -51,6 +99,6 @@ SUBROUTINES:
     
     RETURN
     
-IE_Handler:
+IE_HANDLER:
     
     RETFIE
