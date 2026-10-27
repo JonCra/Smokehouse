@@ -66,9 +66,28 @@ SETUP:
 	 3 - 1(SEND SYNC BREAK) / 0(SYNC BREAK Tx CMPLT)
 	 2 - 1(HI SPD) / 0(LO SPD)
 	 1 - 1(Tx SHFT REG EMPT) / 0(Tx SHFT REG FULL)
-	 0 - (NINTH BIT OF Tx DAT; CAN BE ADDRESS/DAT OR PARITY BIT)
+	 0 - (9th BIT OF Tx DAT; CAN BE ADDRESS/DAT OR PARITY BIT)
 	*/
 	MOVWF	TXSTA
+    BANKSEL	RCSTA
+	MOVLW	1_01_000B
+	/*
+	 UART MODE; Rx STAT AND CTRL REG
+	 7 - 1(SRL PRT ENBL) / 0(SRL PRT DSBL)
+	 6 - 1(9b Rx) / 0(8b Rx)
+	 5 - NA
+	 4 - 1(ENBL Rx'r) / 0(DSBL Rx'r)
+	 3 - 
+	 2 - FRAMING ERROR: 1(Y) / 0(N)
+	 1 - OVERRUN ERROR: 1(Y) / 0(N)
+	 0 - 9th BIT OF Tx DAT
+	*/
+	MOVWF	RCSTA
+    BANKSEL	
+	MOVLW	
+	/*
+	 
+	*/
     
     ; -------------------
     ; PORTC SETUP
