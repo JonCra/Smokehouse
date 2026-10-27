@@ -1,10 +1,10 @@
 /*
     Jonas Cram
-     Robotics and Communication Systems Engineering Technology (RCET)
-     College of Technology - Idaho State University
+    Robotics and Communication Systems Engineering Technology (RCET)
+    College of Technology - Idaho State University
      
-    Project Smokehouse
-     
+    Project Smokehouse Transmitter Board Code
+    Revised 20261027 (yyyymmdd)
  */
     
 ; PIC16F1788 Configuration Bit Settings
@@ -194,7 +194,6 @@ SETUP:
 	CLRF	PIE3
      BANKSEL	PIE4
 	CLRF	PIE4
-    
      BANKSEL	INTCON
 	BCF	INTCON,0    ; CLR IOC IE FLG
 	BCF	INTCON,1    ; CLR INT EXT IE FLG
@@ -211,10 +210,10 @@ MAIN:
     
     GOTO    MAIN    ; LOOP INDEF
     
-SUBROUTINES:
-    
-    RETURN
-    
 IE_HANDLER:
     
     RETFIE
+    
+SUBROUTINES:
+    
+    RETURN
