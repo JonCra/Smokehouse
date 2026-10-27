@@ -40,6 +40,8 @@ PSECT isrVect,class=CODE,delta=2
     GOTO IE_HANDLER
   
 SETUP:
+    BANKSEL	INTCON
+	BCF	INTCON,7	; DSBL GLBL IEs
     ; -------------------
     ; Register Setup
     ; -------------------
@@ -55,8 +57,9 @@ SETUP:
     ; -------------------
     ; UART SETUP
     ; -------------------
-    BANKSEL	TXSTA
-	MOVLW	0_000110B
+     BANKSEL	TX1STA
+	; LOAD Tx'r REG SETUP
+	MOVLW	00000010B
 	/*
 	 BITS FOR ASYNC MODE
 	 7 - NA
@@ -68,51 +71,78 @@ SETUP:
 	 1 - 1(Tx SHFT REG EMPT) / 0(Tx SHFT REG FULL)
 	 0 - (9th BIT OF Tx DAT; CAN BE ADDRESS/DAT OR PARITY BIT)
 	*/
-	MOVWF	TXSTA
-    BANKSEL	RCSTA
-	MOVLW	1_01_000B
+	MOVWF	TX1STA
+     BANKSEL	RC1STA
+	; LOAD Rx'r REG SETUP
+	MOVLW	10010000B
 	/*
 	 UART MODE; Rx STAT AND CTRL REG
 	 7 - 1(SRL PRT ENBL) / 0(SRL PRT DSBL)
 	 6 - 1(9b Rx) / 0(8b Rx)
 	 5 - NA
 	 4 - 1(ENBL Rx'r) / 0(DSBL Rx'r)
-	 3 - 
+	 3 - BIT 6 MUST BE HI
+	    1(ENBLs ADDR DETECTION, ENBL IE AND LD Rx BFFR WHEN RSR<8> IS SET)
+	    0(DSBLs ADDR DETECTION, ALL BYTES Rx'd AND 9th CAN BE PARITY)
 	 2 - FRAMING ERROR: 1(Y) / 0(N)
 	 1 - OVERRUN ERROR: 1(Y) / 0(N)
 	 0 - 9th BIT OF Tx DAT
 	*/
-	MOVWF	RCSTA
-    BANKSEL	
-	MOVLW	
+	MOVWF	RC1STA
+     BANKSEL	BAUD1CON
+	; LOAD BAUD CONTROL REG SETUP
+	MOVLW	00000010B
 	/*
-	 
+	 ASYNC MODE BIT CONFIGs
+	 7 - 1(AUTO-BAUD TMR OVRFLW) / 0(AUTO-BAUD TMR NO OVRFLW)
+	 6 - 1(Rx'r IS IDLE) / 0(Rx'r IS Rx'ing)
+	 5 - NA
+	 4 - 1(INVERT Tx'd DATA) / 0(DO NOT INVERT Tx'd DATA)
+	 3 - 1(16b BRG USED) / 0(8b BRG USED)
+	 2 - NA
+	 1 - 1(WAKE-UP ENBL'D; FALLING EDGE TRIG) / 0(Rx'r OPERATING NORMALLY)
+	 0 - 1(AUTO-BAUD DETECT ENBL'd) / 0(AUTO-BAUD DETECT DSBL'd)
 	*/
+	MOVWF	BAUD1CON
     
     ; -------------------
     ; PORTC SETUP
     ; -------------------
     BANKSEL	PORTC
-	CLRF	PORTC		; CLR PORTC
+	CLRF	PORTC	; CLR PORTC
     BANKSEL	TRISC
-	MOVLW	
+	MOVLW	00000000B
 	/*
-	 0 - 
-	 1 - 
-	 2 - 
-	 3 - 
-	 4 - 
-	 5 - 
-	 6 - 
 	 7 - 
+	 6 - 
+	 5 - 
+	 4 - 
+	 3 - 
+	 2 - 
+	 1 - 
+	 0 - 
 	*/
 	MOVWF	TRISC
+;    BANKSEL	
     
-    GOTO MAIN
+    ; -------------------
+    ; INTCON SETUP
+    ; -------------------
+    BANKSEL	INTCON
+	; ENABLE FUNCTION IS HI STATE
+	BCF	INTCON,0    ; CLR IOC IE FLG
+	BCF	INTCON,1    ; CLR INT EXT IE FLG
+	BCF	INTCON,2    ; CLR TMR0 IE FLG
+	BCF	INTCON,3    ; DSBL IOC IE
+	BCF	INTCON,4    ; DSBL EXT IE
+	BCF	INTCON,5    ; DSBL TMR0 OVERFLOW IE
+	BSF	INTCON,6    ; ENBL PERIPH IEs
+	BSF	INTCON,7    ; ENBL GLBL IEs
+    GOTO    MAIN
     
 MAIN:
     
-    END
+    GOTO    MAIN    ; LOOP INDEF
     
 SUBROUTINES:
     
