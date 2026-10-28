@@ -41,8 +41,8 @@ PSECT isrVect,class=CODE,delta=2
     GOTO IE_HANDLER
   
 SETUP:
-    BANKSEL	INTCON
-	BCF	INTCON,7	; DSBL GLBL IEs
+    ;BANKSEL	INTCON
+	;BCF	INTCON,7	; DSBL GLBL IEs
 	
     ; -------------------
     ; Register Setup
@@ -56,6 +56,20 @@ SETUP:
     RX_TEMP	EQU 0x72h	; INIT TEMP Rx PORT REG
 	CLRF	RX_TEMP		; CLR REG
 
+    HANDSHAKE	EQU 0x73h
+	MOVLW	0x24h
+	MOVWF	HANDSHAKE	; LOAD "$" HANDSHAKE INTO REG
+	CLRW
+    
+    DEBUG	EQU 0x74h
+	CLRF	DEBUG
+	
+    TMR2_SETUP	EQU 0x75h
+	CLRF	TMR2_SETUP
+	
+    COUNTER0	EQU 0x76h
+	CLRF	COUNTER0
+	
     ; -------------------
     ; UART SETUP
     ; -------------------
@@ -73,7 +87,6 @@ SETUP:
 	*/
 	MOVWF	APFCON1
 	CLRW
-    
      BANKSEL	TX1STA
 	; LOAD Tx'r REG SETUP
 	MOVLW	00000010B
@@ -130,7 +143,6 @@ SETUP:
     ; -------------------
     BANKSEL	PORTC
 	CLRF	PORTC	; CLR PORTC
-	
     BANKSEL	TRISC
 	; 1(TRI-STATE INPUT) / 0(OUTPUT)
 	MOVLW	10011001B
@@ -148,7 +160,8 @@ SETUP:
 	 2 - 1(TMR2 ON)/0(TMR2 OFF)
 	 1-0 - PRESCALER BITS 
 	*/
-	MOVWF	T2CON
+	MOVWF	T2CON		; CONFIG TMR2
+	MOVWF	TMR2_SETUP	; STORE TMR2 SETUP
 	CLRW
     BANKSEL	TMR2
 	CLRF	TMR2
@@ -186,17 +199,15 @@ SETUP:
 	; PIR3,4    ; CCP3 IE FLG
      BANKSEL	PIR4
 	CLRF	PIR4
-    
      BANKSEL	PIE1
 	BCF	PIE1,7	    ; DSBL TMR1 GATE IE
 	BCF	PIE1,6	    ; DSBL ADC IE
 	BSF	PIE1,5	    ; ENBL EUSART Rx IE
-	BCF	PIE1,4	    ; ENBL EUSART Tx IE
+	BSF	PIE1,4	    ; ENBL EUSART Tx IE
 	BSF	PIE1,3	    ; ENBL MSSP IE
 	BCF	PIE1,2	    ; DSBL CCP1 IE
 	BSF	PIE1,1	    ; ENBL TMR2 IE
 	BCF	PIE1,0	    ; DSBL TMR1 OVRFLW IE
-	
      BANKSEL	PIE2
 	BCF	PIE2,7	    ; DSBL OSC FAIL IE
 	BCF	PIE2,6	    ; DSBL COMP2 IE
@@ -206,7 +217,6 @@ SETUP:
 	BCF	PIE2,2	    ; DSBL COMP4 IE
 	BCF	PIE2,1	    ; DSBL COMP3 IE
 	BCF	PIE2,0	    ; DSBL CCP2 IE
-	
      BANKSEL	PIE3
 	CLRF	PIE3
      BANKSEL	PIE4
@@ -224,12 +234,83 @@ CLRW
 GOTO    MAIN
     
 MAIN:
-    
     GOTO    MAIN    ; LOOP INDEF
-    
 IE_HANDLER:
+    BANKSEL	INTCON
+    BCF		INTCON,7    ; DSBL GLBL IEs
     
-    RETFIE
+    BANKSEL	W_TEMP	    ; STORE W REG
+    MOVWF	W_TEMP	    ; 
+    MOVF	STATUS,W    ; STORE STATUS REG
+    MOVWF	STATUS_TEMP ;
+    
+    BANKSEL	PIR1
+    BTFSS	PIR1,1	    ; TMR2 IE?
+    GOTO	LEAVEISR    ; N: LEAVE ISR
+    BANKSEL	PIR1
+    BCF		PIR1,1	    ; CLR TMR2 IE FLG
+    ; - - - - - TEST OTHER FLAGS - - - - -
+    BANKSEL	RCSTA
+    BTFSC	RCSTA,1	    ; OVERRUN ERROR?
+    GOTO	CLR_OVRRN   ; Y: CLEAR OVERRUN
+    BTFSC	RCSTA,2	    ; FRAMING ERROR?
+    GOTO	DISCARD	    ; Y: CLR DATA
+    
+    ; - - - - -
+    ; STORE Rx'd DATA
+    ; - - - - -
+    MOVF	RCREG,W
+    MOVWF	Rx_TEMP	    ; STORE Rx'd DATA
+    BTFSS	DEBUG,0	    ; HANDSHAKE TESTED?
+    GOTO	HS_TEST	    ; N: TEST HANDSHAKE
+    ; - - - - - HANDSHAKE TESTED - - - - -
+    BCF		DEBUG,0	    ; Y: Only sending 2 bytes, clear Handshake bit
+    MOVF	Rx_TEMP,W   ; Redundantly move INFO DATA to W REG
+    MOVWF	TXREG	    ; Move W REG to Tx REG
+    GOTO	LEAVEISR
+    
+    ; - - - - -
+    ; OVERRUN ERROR
+    ; - - - - -
+    CLR_OVRRN:
+     BCF	RCSTA,4	    ; Toggle / Restart CONST. Rx ENBL
+     BSF	RCSTA,4	    ; ^
+     MOVF	RCREG,0	    ; READ REG TO CLR
+     GOTO	LEAVEISR
+    
+    ; - - - - -
+    ; TEST HANDSHAKE
+    ; - - - - -
+    HS_TEST:
+     XORLW	0x24h	    ; XOR WITH HEX 24 "$"
+     BTFSC	STATUS,2    ; ZERO BIT SET?
+     GOTO	$+2	    ; Y: GOOD HANDSHAKE
+     GOTO	HS_BAD	    ; N: BAD HANDSHAKE
+     ; - - - - - GOOD HANDSHAKE - - - - -
+     BSF	DEBUG,0	    ; HANDSHAKE GOOD, SET INDIC BIT
+     MOVF	RCREG,W	    ; MOVE GOOD HANDSHAKE TO W REG
+     MOVWF	TXREG	    ; ECHO HANDSHAKE BACK
+     BCF	STATUS,2    ; CLR ZERO-BIT FLG
+     GOTO	LEAVEISR
+     ; - - - - - BAD HANDSHAKE - - - - -
+     HS_BAD:
+      BCF	DEBUG,0	    ; CLR GOOD HANDSHAKE BIT
+      GOTO	DISCARD
+      
+    ; - - - - -
+    ; FRAMING ERROR
+    ; - - - - -
+    DISCARD:
+     MOVF	RCREG,0	    ; READ REG TO CLR
+LEAVEISR:
+    ; - - - - - RESTORE W AND STATUS REGS - - - - -
+    MOVF	STATUS_TEMP,W
+    MOVWF	STATUS	    ; RESTORE STATUS REG
+    MOVF	W_TEMP,W    ; RESTORE W REG
+    
+    BANKSEL	INTCON
+    BSF		INTCON,7    ; ENBL GLBL IEs
+    RETFIE		    ; RETURN FROM IE
     
 SUBROUTINES:
     
