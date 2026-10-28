@@ -84,7 +84,7 @@ SETUP:
 	MOVWF	APFCON1
 	CLRW
      BANKSEL	TX1STA
-	; LOAD Tx'r REG SETUP
+	; - - - - - LOAD Tx'r REG SETUP - - - - -
 	MOVLW	00000010B
 	/*
 	 BITS FOR ASYNC MODE
@@ -100,7 +100,7 @@ SETUP:
 	MOVWF	TX1STA
 	CLRW
      BANKSEL	RC1STA
-	; LOAD Rx'r REG SETUP
+	; - - - - - LOAD Rx'r REG SETUP - - - - -
 	MOVLW	10010000B
 	/*
 	 UART MODE; Rx STAT AND CTRL REG
@@ -118,7 +118,7 @@ SETUP:
 	MOVWF	RC1STA
 	CLRW
      BANKSEL	BAUD1CON
-	; LOAD BAUD CONTROL REG SETUP
+	; - - - - - LOAD BAUD CONTROL REG SETUP - - - - -
 	MOVLW	00000010B
 	/*
 	 ASYNC MODE BIT CONFIGs
@@ -161,11 +161,11 @@ SETUP:
 	CLRW
      BANKSEL	TMR2
 	CLRF	TMR2
-    
+
     ; -------------------
     ; INTERRUPT SETUP
     ; -------------------
-     ; CLR PERIPH IE FLGs
+     ; - - - - - CLR PERIPH IE FLGs - - - - -
      BANKSEL	PIR1
 	CLRF	PIR1
 	/*
@@ -194,7 +194,7 @@ SETUP:
 	CLRF	PIR3
 	; PIR3,4    ; CCP3 IE FLG
      BANKSEL	PIR4
-	CLRF	PIR4
+	CLRF	PIR4	    ; xX UNUSED Xx
      BANKSEL	PIE1
 	BCF	PIE1,7	    ; DSBL TMR1 GATE IE
 	BCF	PIE1,6	    ; DSBL ADC IE
@@ -214,9 +214,9 @@ SETUP:
 	BCF	PIE2,1	    ; DSBL COMP3 IE
 	BCF	PIE2,0	    ; DSBL CCP2 IE
      BANKSEL	PIE3
-	CLRF	PIE3
+	CLRF	PIE3	    ; xX UNUSED Xx
      BANKSEL	PIE4
-	CLRF	PIE4
+	CLRF	PIE4	    ; xX UNUSED Xx
      BANKSEL	INTCON
 	BCF	INTCON,0    ; CLR IOC IE FLG
 	BCF	INTCON,1    ; CLR INT EXT IE FLG
@@ -234,12 +234,10 @@ MAIN:
 IE_HANDLER:
     BANKSEL	INTCON
     BCF		INTCON,7    ; DSBL GLBL IEs
-    
-    BANKSEL	W_TEMP	    ; STORE W REG
-    MOVWF	W_TEMP	    ; 
+    MOVWF	W_TEMP	    ; STORE W REG
     MOVF	STATUS,W    ; STORE STATUS REG
-    MOVWF	STATUS_TEMP ;
-    
+    MOVWF	STATUS_TEMP ; ^
+    ; - - - - - TEST INTERRUPT FLAG(S) - - - - -
     BANKSEL	PIR1
     BTFSS	PIR1,1	    ; TMR2 IE?
     GOTO	LEAVEISR    ; N: LEAVE ISR
@@ -250,53 +248,55 @@ IE_HANDLER:
     GOTO	CLR_OVRRN   ; Y: CLEAR OVERRUN
     BTFSC	RC1STA,2    ; FRAMING ERROR?
     GOTO	DISCARD	    ; Y: CLR DATA
-    
-    ; - - - - -
-    ; STORE Rx'd DATA
-    ; - - - - -
+    ; - - - - - STORE Rx'd DATA - - - - -
     MOVF	RC1REG,W
     MOVWF	RX_TEMP	    ; STORE Rx'd DATA
     BTFSS	DEBUG,0	    ; HANDSHAKE TESTED?
     GOTO	HS_TEST	    ; N: TEST HANDSHAKE
     ; - - - - - HANDSHAKE ALREADY TESTED - - - - -
+    BANKSEL	TX1REG
     BCF		DEBUG,0	    ; Y: Only sending 2 bytes, CLR Handshake bit
     MOVF	RX_TEMP,W   ; ECHO Rx'd DATA BACK
     MOVWF	TX1REG	    ; ^
     GOTO	LEAVEISR
     
-    ; - - - - -
-    ; OVERRUN ERROR
-    ; - - - - -
-    CLR_OVRRN:
+ ; - - - - -
+ ; OVERRUN ERROR
+ ; - - - - -
+ CLR_OVRRN:
+     BANKSEL	RC1STA
      BCF	RC1STA,4    ; Toggle / Restart CONST. Rx ENBL
      BSF	RC1STA,4    ; ^
      MOVF	RC1REG,0    ; READ REG TO CLR
      GOTO	LEAVEISR
     
-    ; - - - - -
-    ; TEST HANDSHAKE
-    ; - - - - -
-    HS_TEST:
+ ; - - - - -
+ ; TEST HANDSHAKE
+ ; - - - - -
+ HS_TEST:
      XORLW	0x24h	    ; XOR WITH HEX 24 "$"
+     BANKSEL	STATUS
      BTFSC	STATUS,2    ; ZERO BIT SET?
      GOTO	$+2	    ; Y: GOOD HANDSHAKE
      GOTO	HS_BAD	    ; N: BAD HANDSHAKE
      ; - - - - - GOOD HANDSHAKE - - - - -
      BSF	DEBUG,0	    ; HANDSHAKE GOOD, SET INDIC BIT
+     BANKSEL	RC1REG
      MOVF	RC1REG,W    ; MOVE GOOD HANDSHAKE TO W REG
      MOVWF	TX1REG	    ; ECHO HANDSHAKE BACK
      BCF	STATUS,2    ; CLR ZERO-BIT FLG
      GOTO	LEAVEISR
-     ; - - - - - BAD HANDSHAKE - - - - -
-     HS_BAD:
-      BCF	DEBUG,0	    ; CLR GOOD HANDSHAKE BIT
-      GOTO	DISCARD
+    ; - - - - - BAD HANDSHAKE - - - - -
+    HS_BAD:
+	BCF	DEBUG,0	    ; CLR GOOD HANDSHAKE BIT
+	GOTO	DISCARD
       
-    ; - - - - -
-    ; FRAMING ERROR
-    ; - - - - -
-    DISCARD:
-     MOVF	RC1REG,0    ; READ REG TO CLR
+ ; - - - - -
+ ; FRAMING ERROR
+ ; - - - - -
+ DISCARD:
+    BANKSEL	RC1REG
+    MOVF	RC1REG,0    ; READ REG TO CLR
 LEAVEISR:
     ; - - - - - RESTORE W AND STATUS REGS - - - - -
     MOVF	STATUS_TEMP,W
