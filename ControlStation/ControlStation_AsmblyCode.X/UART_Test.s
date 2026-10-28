@@ -6,6 +6,11 @@
     - - - - - UART Tx/Rx TEST CODE - - - - -
     Project Smokehouse Transmitter Board
     Revised 20261027 (yyyymmdd)
+     
+    PROGRAM FUNCTION:
+     RECEIVE AND ECHO A 2-BYTE PACKET
+	BYTE 1: HANDSHAKE - 0x24h (ASCII "$")
+	BYTE 2: DATA
  */
     
 ; PIC16F1788 Configuration Bit Settings
@@ -41,32 +46,23 @@ PSECT isrVect,class=CODE,delta=2
     GOTO IE_HANDLER
   
 SETUP:
-    ;BANKSEL	INTCON
-	;BCF	INTCON,7	; DSBL GLBL IEs
-	
     ; -------------------
     ; Register Setup
     ; -------------------
     STATUS_TEMP EQU 0x70h	; INIT TEMP STATUS REG
 	CLRF	STATUS_TEMP	; CLR REG
-	
     W_TEMP	EQU 0x71h	; INIT TEMP W REG
 	CLRF	W_TEMP		; CLR REG
-	
     RX_TEMP	EQU 0x72h	; INIT TEMP Rx PORT REG
 	CLRF	RX_TEMP		; CLR REG
-
     HANDSHAKE	EQU 0x73h
 	MOVLW	0x24h
 	MOVWF	HANDSHAKE	; LOAD "$" HANDSHAKE INTO REG
 	CLRW
-    
     DEBUG	EQU 0x74h
 	CLRF	DEBUG
-	
     TMR2_SETUP	EQU 0x75h
 	CLRF	TMR2_SETUP
-	
     COUNTER0	EQU 0x76h
 	CLRF	COUNTER0
 	
@@ -152,7 +148,7 @@ SETUP:
     ; -------------------
     ; TIMER 2 SETUP
     ; -------------------
-    BANKSEL	T2CON
+     BANKSEL	T2CON
 	MOVLW	00000100B
 	/*
 	 7 - NA
@@ -163,7 +159,7 @@ SETUP:
 	MOVWF	T2CON		; CONFIG TMR2
 	MOVWF	TMR2_SETUP	; STORE TMR2 SETUP
 	CLRW
-    BANKSEL	TMR2
+     BANKSEL	TMR2
 	CLRF	TMR2
     
     ; -------------------
@@ -234,7 +230,7 @@ CLRW
 GOTO    MAIN
     
 MAIN:
-    GOTO    MAIN    ; LOOP INDEF
+    GOTO	MAIN	    ; LOOP INDEF
 IE_HANDLER:
     BANKSEL	INTCON
     BCF		INTCON,7    ; DSBL GLBL IEs
@@ -247,35 +243,34 @@ IE_HANDLER:
     BANKSEL	PIR1
     BTFSS	PIR1,1	    ; TMR2 IE?
     GOTO	LEAVEISR    ; N: LEAVE ISR
-    BANKSEL	PIR1
-    BCF		PIR1,1	    ; CLR TMR2 IE FLG
-    ; - - - - - TEST OTHER FLAGS - - - - -
-    BANKSEL	RCSTA
-    BTFSC	RCSTA,1	    ; OVERRUN ERROR?
+    BCF		PIR1,1	    ; Y: CLR TMR2 IE FLG
+    ; - - - - - TEST ERROR FLAGS- - - - -
+    BANKSEL	RC1STA
+    BTFSC	RC1STA,1    ; OVERRUN ERROR?
     GOTO	CLR_OVRRN   ; Y: CLEAR OVERRUN
-    BTFSC	RCSTA,2	    ; FRAMING ERROR?
+    BTFSC	RC1STA,2    ; FRAMING ERROR?
     GOTO	DISCARD	    ; Y: CLR DATA
     
     ; - - - - -
     ; STORE Rx'd DATA
     ; - - - - -
-    MOVF	RCREG,W
-    MOVWF	Rx_TEMP	    ; STORE Rx'd DATA
+    MOVF	RC1REG,W
+    MOVWF	RX_TEMP	    ; STORE Rx'd DATA
     BTFSS	DEBUG,0	    ; HANDSHAKE TESTED?
     GOTO	HS_TEST	    ; N: TEST HANDSHAKE
-    ; - - - - - HANDSHAKE TESTED - - - - -
-    BCF		DEBUG,0	    ; Y: Only sending 2 bytes, clear Handshake bit
-    MOVF	Rx_TEMP,W   ; Redundantly move INFO DATA to W REG
-    MOVWF	TXREG	    ; Move W REG to Tx REG
+    ; - - - - - HANDSHAKE ALREADY TESTED - - - - -
+    BCF		DEBUG,0	    ; Y: Only sending 2 bytes, CLR Handshake bit
+    MOVF	RX_TEMP,W   ; ECHO Rx'd DATA BACK
+    MOVWF	TX1REG	    ; ^
     GOTO	LEAVEISR
     
     ; - - - - -
     ; OVERRUN ERROR
     ; - - - - -
     CLR_OVRRN:
-     BCF	RCSTA,4	    ; Toggle / Restart CONST. Rx ENBL
-     BSF	RCSTA,4	    ; ^
-     MOVF	RCREG,0	    ; READ REG TO CLR
+     BCF	RC1STA,4    ; Toggle / Restart CONST. Rx ENBL
+     BSF	RC1STA,4    ; ^
+     MOVF	RC1REG,0    ; READ REG TO CLR
      GOTO	LEAVEISR
     
     ; - - - - -
@@ -288,8 +283,8 @@ IE_HANDLER:
      GOTO	HS_BAD	    ; N: BAD HANDSHAKE
      ; - - - - - GOOD HANDSHAKE - - - - -
      BSF	DEBUG,0	    ; HANDSHAKE GOOD, SET INDIC BIT
-     MOVF	RCREG,W	    ; MOVE GOOD HANDSHAKE TO W REG
-     MOVWF	TXREG	    ; ECHO HANDSHAKE BACK
+     MOVF	RC1REG,W    ; MOVE GOOD HANDSHAKE TO W REG
+     MOVWF	TX1REG	    ; ECHO HANDSHAKE BACK
      BCF	STATUS,2    ; CLR ZERO-BIT FLG
      GOTO	LEAVEISR
      ; - - - - - BAD HANDSHAKE - - - - -
@@ -301,7 +296,7 @@ IE_HANDLER:
     ; FRAMING ERROR
     ; - - - - -
     DISCARD:
-     MOVF	RCREG,0	    ; READ REG TO CLR
+     MOVF	RC1REG,0    ; READ REG TO CLR
 LEAVEISR:
     ; - - - - - RESTORE W AND STATUS REGS - - - - -
     MOVF	STATUS_TEMP,W
