@@ -5,7 +5,7 @@
      
     - - - - - UART Tx/Rx TEST CODE - - - - -
     Project Smokehouse Transmitter Board
-    Revised 20261027 (yyyymmdd)
+    Revised 20261029 (yyyymmdd)
      
     PROGRAM FUNCTION:
      RECEIVE AND ECHO A 2-BYTE PACKET
@@ -63,6 +63,8 @@ SETUP:
 	CLRF	TMR2_SETUP
     COUNTER0	EQU 0x75h
 	CLRF	COUNTER0
+    DEBUG	EQU 0x76h
+	CLRF	DEBUG
 	
     ; -------------------
     ; UART SETUP
@@ -133,7 +135,7 @@ SETUP:
 	CLRW
     
     ; -------------------
-    ; PORTC SETUP
+    ; PORTB SETUP
     ; -------------------
     BANKSEL	PORTB
 	CLRF	PORTB	    ; SET PORTB VALUE TO ZERO
@@ -272,6 +274,9 @@ IE_HANDLER:
     
     ; - - - - - TEST ERROR FLAGS- - - - -
     ERROR_TEST:
+    BTFSS	DEBUG,0	    ; PIC CONFIG'd?
+    CALL	PIC_CONFIG  ; NO, CONFIG PIC
+    
     BANKSEL	PIR1
     BCF		PIR1,1	    ; CLR TMR2 IE FLG
     BANKSEL	RC1STA
@@ -324,3 +329,16 @@ LEAVEISR:
     BANKSEL	INTCON
     BSF		INTCON,7    ; ENBL GLBL IEs
     RETFIE		    ; RETURN FROM IE
+    
+; - - - - -
+; SUBROUTINES
+; - - - - -
+PIC_CONFIG:
+    BANKSEL	PORTC
+    BTFSS	PORTC,0	
+    GOTO	$+3
+    BANKSEL	T2CON
+    BCF		T2CON,1	    ; PIC IS Rx'r, DSBL TMR2
+    
+    BSF		DEBUG,0	    ; SET CONFIG'd BIT
+    RETURN
