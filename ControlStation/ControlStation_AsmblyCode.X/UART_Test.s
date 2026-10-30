@@ -259,7 +259,9 @@ MAIN:
     BTFSS	DEBUG,0	    ; PIC CONFIG'd?
     CALL	PIC_CONFIG  ; NO, CONFIG PIC
     GOTO	MAIN	    ; LOOP INDEF
+    
 IE_HANDLER:
+    ; - - - - - SAVE W AND STATUS REGS - - - - -
     BANKSEL	INTCON
     BCF		INTCON,7    ; DSBL GLBL IEs
     MOVWF	W_TEMP	    ; STORE W REG
@@ -285,19 +287,20 @@ IE_HANDLER:
     GOTO	DISCARD	    ; Y: CLR DATA
     GOTO	HS_TEST	    ; TEST HANDSHAKE
     
- ; - - - - -
- ; OVERRUN ERROR
- ; - - - - -
+ ; - - - - - OVERRUN ERROR - - - - -
  CLR_OVRRN:
      BANKSEL	RC1STA
      BCF	RC1STA,4    ; Toggle / Restart CONST. Rx ENBL
      BSF	RC1STA,4    ; ^
      MOVF	RC1REG,0    ; READ REG TO CLR
      GOTO	LEAVEISR
+     
+ ; - - - - - FRAMING ERROR - - - - -
+ DISCARD:
+    BANKSEL	RC1REG
+    MOVF	RC1REG,0    ; READ REG TO CLR
     
- ; - - - - -
- ; TEST HANDSHAKE
- ; - - - - -
+ ; - - - - - TEST HANDSHAKE - - - - -
  HS_TEST:
      XORLW	0x24h	    ; XOR WITH HEX 24 "$"
      BANKSEL	STATUS
@@ -312,13 +315,7 @@ IE_HANDLER:
      BANKSEL	PORTB
      INCF	PORTB	    ; INCREMENT PORTB OUTPUT PINS
      GOTO	LEAVEISR
-           
- ; - - - - -
- ; FRAMING ERROR
- ; - - - - -
- DISCARD:
-    BANKSEL	RC1REG
-    MOVF	RC1REG,0    ; READ REG TO CLR
+    
 LEAVEISR:
     ; - - - - - RESTORE W AND STATUS REGS - - - - -
     MOVF	STATUS_TEMP,W
