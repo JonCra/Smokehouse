@@ -5,12 +5,11 @@
      
     - - - - - UART Tx/Rx TEST CODE - - - - -
     Project Smokehouse Transmitter Board
-    Revised 20261029 (yyyymmdd)
+    Revised 20261030 (yyyymmdd)
      
     PROGRAM FUNCTION:
-     RECEIVE AND ECHO A 2-BYTE PACKET
+     RECEIVE AND ECHO A SINGLE-BYTE PACKET
 	BYTE 1: HANDSHAKE - 0x24h (ASCII "$")
-	BYTE 2: DATA
  */
     
 ; PIC16F1788 Configuration Bit Settings
@@ -281,7 +280,7 @@ IE_HANDLER:
     GOTO	ERROR_TEST  ; Y:
     GOTO	LEAVEISR    ; N: LEAVE ISR
     
-    ; - - - - - TEST ERROR FLAGS- - - - -
+    ; - - - - - TEST ERROR FLAGS - - - - -
     ERROR_TEST:
     BANKSEL	RC1STA
     BTFSC	RC1STA,1    ; OVERRUN ERROR?
@@ -323,15 +322,15 @@ IE_HANDLER:
     GOTO	LEAVEISR
      
  SEND_HS:
- ; - - - - - SEND HANDSHAKE DATA - - - - -
+    ; - - - - - SEND HANDSHAKE DATA - - - - -
     BANKSEL	TX1REG
     MOVF	HANDSHAKE,0 ; LOAD HS BYTE
     MOVWF	TX1REG	    ; Tx HS BYTE
      
     BANKSEL	TX1STA
     BTFSS	TX1STA,1    ; Tx BUFFER EMPTY?
-    GOTO	$-1	    ; NO, WAIT
-    BCF		TX1STA,1    ; YES, CLR FLG
+    GOTO	$-1	    ; N: WAIT
+    BCF		TX1STA,1    ; Y: CLR FLG
     GOTO	LEAVEISR
     
 LEAVEISR:
