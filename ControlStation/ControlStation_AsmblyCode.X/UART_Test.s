@@ -85,7 +85,7 @@ SETUP:
 	CLRW
      BANKSEL	TX1STA
 	; - - - - - LOAD Tx'r REG SETUP - - - - -
-	MOVLW	00000010B
+	MOVLW	00100010B
 	/*
 	 BITS FOR ASYNC MODE
 	 7 - NA
@@ -144,7 +144,7 @@ SETUP:
     BANKSEL	WPUB
 	CLRF	WPUB	    ; CLEAR WEAK PULL-UP
     BANKSEL	TRISB
-	MOVLW	00000000B
+	MOVLW	11000000B
 	MOVWF	TRISB	    ; SET PORTB PINS AS OUTPUTS
     
     ; -------------------
@@ -167,8 +167,13 @@ SETUP:
 	    T_INSTR = 361.690ns
 	TMR2 IE = T_INSTR * PREscale * POSTscale * PR2reg
 	TMR2 IE = 361.690ns * 64 * 16 * 255 = 94.444ms
-	94.444ms * 8 = 755.556ms roughly
-	AN LED CAN BE USED AS A VISUAL INDICATOR
+	AN LED CAN BE USED AS A VISUAL INDICATOR:
+	    PORTB,0: 94.444ms * 2 = 188.276ms roughly
+	    PORTB,1: 94.444ms * 4 = 376.552ms roughly
+	    PORTB,2: 94.444ms * 8 = 755.556ms roughly
+	    PORTB,3: 94.444ms * 16 = 1.506s roughly
+	    PORTB,4: 94.444ms * 32 = 3.012s roughly
+	    PORTB,5: 94.444ms * 64 = 6.025s roughly
      */
      BANKSEL	T2CON
 	MOVLW	01111111B	; 1:16 PoSCLR, TMR2 ON, 1:64 PreSCLR
@@ -271,15 +276,13 @@ IE_HANDLER:
     ; - - - - - TEST INTERRUPT FLAG(S) - - - - -
     BANKSEL	PIR1
     BTFSC	PIR1,1	    ; TMR2 IE?
-    GOTO	ERROR_TEST  ; Y: TMR2 IE
+    GOTO	SEND_HS	    ; Y: TMR2 IE, SEND HANDSHAKE
     BTFSC	PIR1,5	    ; EUSART Rx IE?
     GOTO	ERROR_TEST  ; Y:
     GOTO	LEAVEISR    ; N: LEAVE ISR
     
     ; - - - - - TEST ERROR FLAGS- - - - -
-    ERROR_TEST:    
-    BANKSEL	PIR1
-    BCF		PIR1,1	    ; CLR TMR2 IE FLG
+    ERROR_TEST:
     BANKSEL	RC1STA
     BTFSC	RC1STA,1    ; OVERRUN ERROR?
     GOTO	CLR_OVRRN   ; Y: CLEAR OVERRUN
@@ -293,13 +296,16 @@ IE_HANDLER:
      BCF	RC1STA,4    ; Toggle / Restart CONST. Rx ENBL
      BSF	RC1STA,4    ; ^
      MOVF	RC1REG,0    ; READ REG TO CLR
+     CLRW
      GOTO	LEAVEISR
-     
+    
  ; - - - - - FRAMING ERROR - - - - -
  DISCARD:
-    BANKSEL	RC1REG
-    MOVF	RC1REG,0    ; READ REG TO CLR
-    
+     BANKSEL	RC1REG
+     MOVF	RC1REG,0    ; READ REG TO CLR
+     CLRW
+     GOTO	LEAVEISR
+     
  ; - - - - - TEST HANDSHAKE - - - - -
  HS_TEST:
      XORLW	0x24h	    ; XOR WITH HEX 24 "$"
@@ -315,6 +321,18 @@ IE_HANDLER:
      BANKSEL	PORTB
      INCF	PORTB	    ; INCREMENT PORTB OUTPUT PINS
      GOTO	LEAVEISR
+     
+ ; - - - - - SEND HANDSHAKE DATA - - - - -
+ SEND_HS:
+    BANKSEL	TX1REG
+    MOVF	HANDSHAKE,0 ; LOAD HS BYTE
+    MOVWF	TX1REG	    ; Tx HS BYTE
+     
+    BANKSEL	TX1STA
+    BTFSS	TX1STA,1    ; Tx BUFFER EMPTY?
+    GOTO	$-1	    ; NO, WAIT
+    BCF		TX1STA,1    ; YES, CLR FLG
+    GOTO	LEAVEISR
     
 LEAVEISR:
     ; - - - - - RESTORE W AND STATUS REGS - - - - -
