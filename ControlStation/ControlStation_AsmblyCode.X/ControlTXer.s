@@ -4,7 +4,7 @@
     College of Technology - Idaho State University
      
     Project Smokehouse Transmitter Board Code
-    Revised 20261027 (yyyymmdd)
+    Revised 20261102 (yyyymmdd)
  */
     
 ; PIC16F1788 Configuration Bit Settings
@@ -159,7 +159,7 @@ SETUP:
     ; -------------------
     ; INTERRUPT SETUP
     ; -------------------
-     ; CLR PERIPH IE FLGs
+     ; - - - - - CLEAR INTERRUPT FLAGS - - - - -
      BANKSEL	PIR1
 	CLRF	PIR1
 	/*
@@ -190,11 +190,12 @@ SETUP:
      BANKSEL	PIR4
 	CLRF	PIR4
     
+     ; - - - - - CONFIG INTERRUPTS - - - - - 
      BANKSEL	PIE1
 	BCF	PIE1,7	    ; DSBL TMR1 GATE IE
 	BCF	PIE1,6	    ; DSBL ADC IE
 	BSF	PIE1,5	    ; ENBL EUSART Rx IE
-	BCF	PIE1,4	    ; ENBL EUSART Tx IE
+	BCF	PIE1,4	    ; DSBL EUSART Tx IE
 	BSF	PIE1,3	    ; ENBL MSSP IE
 	BCF	PIE1,2	    ; DSBL CCP1 IE
 	BCF	PIE1,1	    ; DSBL TMR2 IE
@@ -204,7 +205,7 @@ SETUP:
 	BCF	PIE2,7	    ; DSBL OSC FAIL IE
 	BCF	PIE2,6	    ; DSBL COMP2 IE
 	BCF	PIE2,5	    ; DSBL COMP1 IE
-	BSF	PIE2,4	    ; ENBL EEPROM WR COMPLETE IE
+	BCF	PIE2,4	    ; DSBL EEPROM WR COMPLETE IE
 	BSF	PIE2,3	    ; ENBL MSSP BUS COLLISION IE
 	BCF	PIE2,2	    ; DSBL COMP4 IE
 	BCF	PIE2,1	    ; DSBL COMP3 IE
@@ -231,9 +232,37 @@ MAIN:
     GOTO    MAIN    ; LOOP INDEF
     
 IE_HANDLER:
+    ; - - - - SAVE WORKING AND STATUS REGs - - - - -
+    BANKSEL	STATUS
+    MOVWF	W_TEMP
+    MOVF	STATUS,W
+    MOVWF	STATUS_TEMP
+    
+    BANKSEL	PIR2
+    BTFSC	PIR2,3	    ; MSSP COLLISION IE?
+    GOTO	MSSP_COLL   ; Y: GOTO HANDLER
+    
+    BANKSEL	PIR1
+    BTFSC	PIR1,4	    ; UART Rx?
+    GOTO	SER_RX	    ; Y: GOTO HANDLER
+    
+    GOTO	LEAVEISR
+    
+MSSP_COLL:
+    ; DO STUFF
+    GOTO	LEAVEISR
+    
+SER_RX:
+    ; DO STUFF
+    GOTO	LEAVEISR
+    
+LEAVEISR:
+    ; - - - - - RESTORE WORKING AND STATUS REGs - - - - -
+    MOVF	STATUS_TEMP,W
+    MOVWF	STATUS
+    MOVF	W_TEMP,W
     
     RETFIE
     
-SUBROUTINES:
+; - - - - - SUBROUTINES - - - - -
     
-    RETURN
