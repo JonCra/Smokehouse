@@ -13,7 +13,7 @@
 %PSECTS
 $build/default/production/UART_Test.o
 resetVect CODE 0 0 0 1 2 1
-isrVect CODE 0 4 4 AE 2 1
+isrVect CODE 0 4 4 AB 2 1
 config CONFIG 4 8007 8007 2 2 1
 # %UNUSED Section
 # This section enumerates the unused ranges of each CLASS. Each entry
@@ -58,9 +58,9 @@ BANK7 3A0-3EF 1
 BANK8 420-46F 1
 BANK9 4A0-4EF 1
 CONST 1-3 2
-CONST B2-3FFF 2
+CONST AF-3FFF 2
 ENTRY 1-3 2
-ENTRY B2-3FFF 2
+ENTRY AF-3FFF 2
 IDLOC 8000-8003 2
 SFR10 500-51F 1
 SFR11 580-59F 1
@@ -85,7 +85,7 @@ SFR29 E80-EEF 1
 SFR30 F00-F6F 1
 SFR31 F80-FEF 1
 CODE 1-3 2
-CODE B2-3FFF 2
+CODE AF-3FFF 2
 SFR0 2-7 1
 SFR3 180-19F 1
 SFR4 200-21F 1
@@ -114,9 +114,9 @@ BIGRAM 2000-27EF 1
 COMMON 70-7F 1
 EEDATA F000-F0FF 2
 STRCODE 1-3 2
-STRCODE B2-3FFF 2
+STRCODE AF-3FFF 2
 STRING 1-3 2
-STRING B2-3FFF 2
+STRING AF-3FFF 2
 # %LINETAB Section
 # This section enumerates the file/line to address mappings.
 # The beginning of the section is indicated by %LINETAB.
@@ -273,38 +273,35 @@ F isrVect CODE >81:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlS
 8F isrVect CODE >326:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
 90 isrVect CODE >329:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
 91 isrVect CODE >330:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-92 isrVect CODE >332:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-93 isrVect CODE >333:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-94 isrVect CODE >334:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-95 isrVect CODE >335:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-96 isrVect CODE >336:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-97 isrVect CODE >339:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-98 isrVect CODE >340:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-99 isrVect CODE >342:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9A isrVect CODE >343:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9B isrVect CODE >344:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9C isrVect CODE >345:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9D isrVect CODE >348:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9E isrVect CODE >349:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-9F isrVect CODE >350:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A0 isrVect CODE >352:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A1 isrVect CODE >353:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A2 isrVect CODE >354:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A3 isrVect CODE >356:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A4 isrVect CODE >357:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A5 isrVect CODE >361:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A6 isrVect CODE >362:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A7 isrVect CODE >363:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A8 isrVect CODE >365:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-A9 isrVect CODE >366:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AA isrVect CODE >367:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AB isrVect CODE >373:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AC isrVect CODE >374:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AD isrVect CODE >375:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AE isrVect CODE >377:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-AF isrVect CODE >378:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-B0 isrVect CODE >381:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
-B1 isrVect CODE >382:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+92 isrVect CODE >331:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+93 isrVect CODE >332:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+94 isrVect CODE >337:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+95 isrVect CODE >338:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+96 isrVect CODE >340:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+97 isrVect CODE >341:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+98 isrVect CODE >342:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+99 isrVect CODE >343:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9A isrVect CODE >346:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9B isrVect CODE >347:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9C isrVect CODE >348:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9D isrVect CODE >350:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9E isrVect CODE >351:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+9F isrVect CODE >352:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A0 isrVect CODE >354:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A1 isrVect CODE >355:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A2 isrVect CODE >359:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A3 isrVect CODE >360:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A4 isrVect CODE >361:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A5 isrVect CODE >363:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A6 isrVect CODE >364:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A7 isrVect CODE >365:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A8 isrVect CODE >371:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+A9 isrVect CODE >372:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+AA isrVect CODE >373:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+AB isrVect CODE >375:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+AC isrVect CODE >376:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+AD isrVect CODE >379:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
+AE isrVect CODE >380:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
 0 resetVect CODE >43:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\ControlStation_AsmblyCode.X\UART_Test.s
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
@@ -318,11 +315,11 @@ B1 isrVect CODE >382:C:\Users\Jonas C\Documents\Smokehouse\ControlStation\Contro
 # was defined in a psect then <psect> will be "-". File-name
 # is the name of the object file in which the symbol was defined.
 %SYMTAB
-__Hspace_0 B2 0 ABS 0 - -
+__Hspace_0 AF 0 ABS 0 - -
 __Hspace_1 0 0 ABS 0 - -
 __Hspace_3 0 0 ABS 0 - -
 __Hspace_4 10010 0 ABS 0 - -
-__HisrVect 164 0 CODE 0 isrVect -
+__HisrVect 15E 0 CODE 0 isrVect -
 __Hudata_bank0 10 0 ABS 0 udata_bank0 -
 __Hudata_bank1 10 0 ABS 0 udata_bank1 -
 __Hudata_bank2 10 0 ABS 0 udata_bank2 -
@@ -424,7 +421,7 @@ __Ludata_shr 10 0 ABS 0 udata_shr -
 # All other numeric quantities are in decimal.
 %SEGMENTS
 resetVect 0 0 0 1 2
-isrVect 0 4 8 AE 2
+isrVect 0 4 8 AB 2
 # %NOTES Section
 # This section contains data of all the note-psects.  The beginning of the section
 # is indicated by %NOTES. The first line indicates the name and decimal
