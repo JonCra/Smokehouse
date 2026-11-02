@@ -15,7 +15,7 @@
 ; PIC16F1788 Configuration Bit Settings
 ; Assembly source line config statements
 ; CONFIG1
-  CONFIG  FOSC = XT             ; Oscillator Selection (XT Oscillator, Crystal/resonator connected between OSC1 and OSC2 pins)
+  CONFIG  FOSC = HS             ; Oscillator Selection (HS Oscillator, High-speed crystal/resonator connected between OSC1 and OSC2 pins)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
   CONFIG  PWRTE = OFF           ; Power-up Timer Enable (PWRT disabled)
   CONFIG  MCLRE = ON            ; MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
@@ -33,7 +33,7 @@
   CONFIG  STVREN = ON           ; Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
   CONFIG  BORV = LO             ; Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
   CONFIG  LPBOR = ON            ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is enabled)
-  CONFIG  DEBUG = ON            ; In-Circuit Debugger Mode (In-Circuit Debugger enabled, ICSPCLK and ICSPDAT are dedicated to the debugger)
+  CONFIG  DEBUG = OFF           ; In-Circuit Debugger Mode (In-Circuit Debugger disabled, ICSPCLK and ICSPDAT are general purpose I/O pins)
   CONFIG  LVP = ON              ; Low-Voltage Programming Enable (Low-voltage programming enabled)
 
 // config statements should precede project file includes.
@@ -49,20 +49,18 @@ SETUP:
     ; Register Setup
     ; -------------------
     STATUS_TEMP EQU 0x70h	; INIT TEMP STATUS REG
-	CLRF	STATUS_TEMP	; CLR REG
+	CLRF	STATUS_TEMP
     W_TEMP	EQU 0x71h	; INIT TEMP W REG
-	CLRF	W_TEMP		; CLR REG
-    RX_TEMP	EQU 0x72h	; INIT TEMP Rx PORT REG
-	CLRF	RX_TEMP		; CLR REG
-    HANDSHAKE	EQU 0x73h
-	MOVLW	0x24h
-	MOVWF	HANDSHAKE	; LOAD "$" HANDSHAKE INTO REG
+	CLRF	W_TEMP
+    RX_TEMP	EQU 0x72h	; INIT TEMP REG FOR Rx'd DATA
+	CLRF	RX_TEMP
+    HANDSHAKE	EQU 0x73h	; INIT REG TO REFERENCE HANDSHAKE "GLOBALLY"
+	MOVLW	0x55h
+	MOVWF	HANDSHAKE
 	CLRW
-    TMR2_SETUP	EQU 0x74h
+    TMR2_SETUP	EQU 0x74h	; STORE TIMER 2 SETUP FOR POSSIBLE RESET/RELOAD
 	CLRF	TMR2_SETUP
-    COUNTER0	EQU 0x75h
-	CLRF	COUNTER0
-    DEBUG	EQU 0x76h
+    DEBUG	EQU 0x75h	; INIT REG FOR DUBUGGING
 	CLRF	DEBUG
 	
     ; -------------------
@@ -112,13 +110,13 @@ SETUP:
 	    0(DSBLs ADDR DETECTION, ALL BYTES Rx'd AND 9th CAN BE PARITY)
 	 2 - FRAMING ERROR: 1(Y) / 0(N)
 	 1 - OVERRUN ERROR: 1(Y) / 0(N)
-	 0 - 9th BIT OF Tx DAT
+	 0 - 9th BIT OF Rx DAT
 	*/
 	MOVWF	RC1STA
 	CLRW
      BANKSEL	BAUD1CON
 	; - - - - - LOAD BAUD CONTROL REG SETUP - - - - -
-	MOVLW	00000010B
+	MOVLW	00001000B
 	/*
 	 ASYNC MODE BIT CONFIGs
 	 7 - 1(AUTO-BAUD TMR OVRFLW) / 0(AUTO-BAUD TMR NO OVRFLW)
@@ -132,7 +130,12 @@ SETUP:
 	*/
 	MOVWF	BAUD1CON
 	CLRW
-    
+    BANKSEL	SP1BRGH
+	
+	CLRW
+    BANKSEL	SP1BRGL
+	
+	CLRW
     ; -------------------
     ; PORTB SETUP
     ; -------------------
@@ -141,7 +144,7 @@ SETUP:
     BANKSEL	ANSELB
 	CLRF	ANSELB	    ; SET PORTB PINS AS DIG IO
     BANKSEL	WPUB
-	CLRF	WPUB	    ; CLEAR WEAK PULL-UP
+	CLRF	WPUB	    ; DSBL PORTB WEAK PULL-UP
     BANKSEL	TRISB
 	MOVLW	11000000B
 	MOVWF	TRISB	    ; SET PORTB PINS AS OUTPUTS
@@ -149,6 +152,10 @@ SETUP:
     ; -------------------
     ; PORTC SETUP
     ; -------------------
+    BANKSEL	ANSELC
+	CLRF	ANSELC	; CONFIG PORTC AS DIG IO
+    BANKSEL	WPUC
+	CLRF	WPUC	; DSBL PORTC WEAK PULL-UP
     BANKSEL	PORTC
 	CLRF	PORTC	; CLR PORTC
     BANKSEL	TRISC
@@ -294,7 +301,7 @@ IE_HANDLER:
     BANKSEL	RC1STA
     BCF		RC1STA,4    ; Toggle / Restart CONST. Rx ENBL
     BSF		RC1STA,4    ; ^
-    MOVF	RC1REG,0    ; READ REG TO CLR
+    MOVF	RC1REG,0    ; READ REG TO CLR (REDUNDANT)
     CLRW
     GOTO	LEAVEISR
     
@@ -312,12 +319,12 @@ IE_HANDLER:
     MOVWF	RX_TEMP	    ; STORE Rx'd DATA IN TEMP REG
     
     MOVF	RX_TEMP,W   ; MOVE STORED Rx'd DATA TO W REG
-    XORWF	HANDSHAKE,W ; XOR W REG W/ HEX 24 "$"
+    XORWF	HANDSHAKE,W ; XOR W REG W/ HANDSHAKE VALUE
     
     BANKSEL	STATUS
     BTFSS	STATUS,2    ; ZERO BIT SET?
     GOTO	DISCARD	    ; N: BAD HANDSHAKE
-     
+    
     ; - - - - - GOOD HANDSHAKE - - - - -
     BCF		STATUS,2    ; CLR ZERO-BIT FLG
     MOVF	RX_TEMP,W   ; MOVE GOOD HANDSHAKE TO W REG
@@ -329,6 +336,9 @@ IE_HANDLER:
     GOTO	LEAVEISR
      
  SEND_HS:
+    BANKSEL	INTCON
+    BCF		INTCON,7    ; DSBL GLBL IEs
+    
     BANKSEL	PIR1
     BCF		PIR1,1	    ; CLR TMR2 FLG
     BTFSS	PIR1,4	    ; Tx BUFFER EMPTY?
@@ -338,6 +348,13 @@ IE_HANDLER:
     BANKSEL	TX1REG
     MOVF	HANDSHAKE,W ; LOAD HS BYTE
     MOVWF	TX1REG	    ; Tx HS BYTE
+    
+    BANKSEL	TX1STA
+    BTFSS	TX1STA,1    ; Tx'r EMPTY?
+    GOTO	$-1	    ; N: TEST AGAIN
+    
+    BANKSEL	INTCON
+    BSF		INTCON,7    ; ENBL GLBL IEs
     
 LEAVEISR:
     ; - - - - - RESTORE W AND STATUS REGS - - - - -
@@ -355,10 +372,11 @@ LEAVEISR:
 PIC_CONFIG:
     BANKSEL	PORTC
     BTFSC	PORTC,0	    ; RC0 HI?
-    GOTO	$+3	    ; Y: PIC IS Tx'r, NO CHANGES
+    GOTO	CONFIGd	    ; Y: PIC IS Tx'r, NO CHANGES
     
     BANKSEL	T2CON
-    BCF		T2CON,1	    ; PIC IS Rx'r, DSBL TMR2
+    BCF		T2CON,2	    ; PIC IS Rx'r, DSBL TMR2
     
+    CONFIGd:
     BSF		DEBUG,0	    ; SET CONFIG'd BIT
     RETURN
