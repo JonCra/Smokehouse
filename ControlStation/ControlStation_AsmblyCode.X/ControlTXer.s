@@ -10,7 +10,7 @@
 ; PIC16F1788 Configuration Bit Settings
 ; Assembly source line config statements
 ; CONFIG1
-  CONFIG  FOSC = XT             ; Oscillator Selection (XT Oscillator, Crystal/resonator connected between OSC1 and OSC2 pins)
+  CONFIG  FOSC = HS             ; Oscillator Selection (HS Oscillator, High-speed crystal/resonator connected between OSC1 and OSC2 pins)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
   CONFIG  PWRTE = OFF           ; Power-up Timer Enable (PWRT disabled)
   CONFIG  MCLRE = ON            ; MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
@@ -28,7 +28,7 @@
   CONFIG  STVREN = ON           ; Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
   CONFIG  BORV = LO             ; Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
   CONFIG  LPBOR = ON            ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is enabled)
-  CONFIG  DEBUG = ON            ; In-Circuit Debugger Mode (In-Circuit Debugger enabled, ICSPCLK and ICSPDAT are dedicated to the debugger)
+  CONFIG  DEBUG = OFF           ; In-Circuit Debugger Mode (In-Circuit Debugger disabled, ICSPCLK and ICSPDAT are general purpose I/O pins)
   CONFIG  LVP = ON              ; Low-Voltage Programming Enable (Low-voltage programming enabled)
 
 // config statements should precede project file includes.
@@ -48,12 +48,14 @@ SETUP:
     ; -------------------
     STATUS_TEMP EQU 0x70h	; INIT TEMP STATUS REG
 	CLRF	STATUS_TEMP	; CLR REG
-	
     W_TEMP	EQU 0x71h	; INIT TEMP W REG
 	CLRF	W_TEMP		; CLR REG
-	
     RX_TEMP	EQU 0x72h	; INIT TEMP Rx PORT REG
 	CLRF	RX_TEMP		; CLR REG
+    HANDSHAKE	EQU 0x73h
+	MOVLW	0x24h
+	MOVWF	HANDSHAKE	; INIT AND LOAD HANDSHAKE VALUE INTO REG
+	CLRW
 
     ; -------------------
     ; UART SETUP
@@ -74,8 +76,8 @@ SETUP:
 	CLRW
     
      BANKSEL	TX1STA
-	; LOAD Tx'r REG SETUP
-	MOVLW	00000010B
+	; - - - - - LOAD Tx'r REG SETUP - - - - -
+	MOVLW	00100010B
 	/*
 	 BITS FOR ASYNC MODE
 	 7 - NA
@@ -89,8 +91,9 @@ SETUP:
 	*/
 	MOVWF	TX1STA
 	CLRW
+	
      BANKSEL	RC1STA
-	; LOAD Rx'r REG SETUP
+	; - - - - - LOAD Rx'r REG SETUP - - - - -
 	MOVLW	10010000B
 	/*
 	 UART MODE; Rx STAT AND CTRL REG
@@ -103,13 +106,14 @@ SETUP:
 	    0(DSBLs ADDR DETECTION, ALL BYTES Rx'd AND 9th CAN BE PARITY)
 	 2 - FRAMING ERROR: 1(Y) / 0(N)
 	 1 - OVERRUN ERROR: 1(Y) / 0(N)
-	 0 - 9th BIT OF Tx DAT
+	 0 - 9th BIT OF Rx DAT
 	*/
 	MOVWF	RC1STA
 	CLRW
+	
      BANKSEL	BAUD1CON
-	; LOAD BAUD CONTROL REG SETUP
-	MOVLW	00000010B
+	; - - - - - LOAD BAUD CONTROL REG SETUP - - - - -
+	MOVLW	00001000B
 	/*
 	 ASYNC MODE BIT CONFIGs
 	 7 - 1(AUTO-BAUD TMR OVRFLW) / 0(AUTO-BAUD TMR NO OVRFLW)
@@ -123,12 +127,28 @@ SETUP:
 	*/
 	MOVWF	BAUD1CON
 	CLRW
+	
+     ; - - - - - BAUD RATE GENERATOR - - - - -
+	; DESIRED BAUD = Fosc/(X(SPBRGH:SPBRGL + 1)
+	; X = VALUE DEPENDENT ON BAUD RATE, SEE DATASHEET
+	; SPBRGH:SPBRGL = (((11.0592MHz/9600 BAUD)/16) - 1
+	; SPBRGH:SPBRGL = 71d = 47h
+	; SPBRGH = 0x00h, SPBRGL = 0x47h
+     BANKSEL	SP1BRGH
+	CLRF	SP1BRGH	    ; CLR HI-BYTE OF BAUD RATE GEN (BRG16)
+     BANKSEL	SP1BRGL
+	MOVLW	0x47h	    
+	MOVWF	SP1BRGL
+	CLRW
     
     ; -------------------
     ; PORTC SETUP
     ; -------------------
     BANKSEL	PORTC
 	CLRF	PORTC	; CLR PORTC
+	
+    BANKSEL	WPUC
+	CLRF	WPUC	; DSBL PORTC WEAK PULL-UP
 	
     BANKSEL	TRISC
 	; 1(TRI-STATE INPUT) / 0(OUTPUT)
