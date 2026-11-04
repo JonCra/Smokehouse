@@ -7,6 +7,8 @@
     Project Smokehouse Transmitter Board
     Revised 20261102 (yyyymmdd)
      
+    MPLAB X IDE v6.20
+     
     PROGRAM FUNCTION:
      RECEIVE AND ECHO A SINGLE-BYTE PACKET
 	BYTE 1: HANDSHAKE - 0x24h (ASCII "$")
