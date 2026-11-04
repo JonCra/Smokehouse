@@ -5,6 +5,8 @@
      
     Project Smokehouse Receiver/Slave Board Code
     Revised 20261102 (yyyymmdd)
+     
+    MPLAB X IDE v6.20
  */
     
 ; PIC16F1788 Configuration Bit Settings
