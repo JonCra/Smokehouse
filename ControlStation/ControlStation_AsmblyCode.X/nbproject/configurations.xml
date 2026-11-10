@@ -66,7 +66,7 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="ControlTXer.s" ex="false" overriding="false">
+      <item path="ControlTXer.s" ex="true" overriding="false">
         <pic-as-assembler>
         </pic-as-assembler>
         <pic-as-global>
@@ -599,6 +599,12 @@
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Simulator>
       <item path="Slave-RXr_Code.s" ex="true" overriding="false">
+        <pic-as-assembler>
+        </pic-as-assembler>
+        <pic-as-global>
+        </pic-as-global>
+        <pic-as-linker>
+        </pic-as-linker>
       </item>
       <Tool>
         <property key="AutoSelectMemRanges" value="auto"/>
@@ -616,6 +622,7 @@
         <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
@@ -1115,7 +1122,13 @@
                   value=""/>
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Tool>
-      <item path="UART_Test.s" ex="true" overriding="false">
+      <item path="UART_Test.s" ex="false" overriding="false">
+        <pic-as-assembler>
+        </pic-as-assembler>
+        <pic-as-global>
+        </pic-as-global>
+        <pic-as-linker>
+        </pic-as-linker>
       </item>
       <pic-as-assembler>
         <property key="fmax-errors" value="20"/>
