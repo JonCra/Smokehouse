@@ -111889,7 +111889,7 @@
 		)
 		(uuid "fecbfece-fb2b-49e6-8bf6-d2472a54913f")
 	)
-	(text "NOTE 1: Datasheet ratings VoL_{MAX}=0.7V and IoL/IoH=±20mA_{MAX}\n	Assuming the LED drops 2V, VR_{LED}=2.3V.\n	R_{LED} = 2.3V/20mA_{MAX} = 115Ω_{MIN}\n	I_{LED} = 2.3V/240Ω = 9.583mA\nNOTE 2: D3 was tested with a 1N4148 general purpose diode.\n	Any equivelant GP diode should be sufficient.\nNOTE 3: I^{2}C resistors are set to 470Ω by default to preserve signal\n	fidelity, but can be adjusted UP TO 4.7kΩ as seen fit."
+	(text "NOTE 1: D3 was tested with a 1N4148 general purpose diode.\n	Any equivelant GP diode should be sufficient.\nNOTE 2: I^{2}C resistors are set to 470Ω by default to preserve signal\n	fidelity, but can be adjusted UP TO 4.7kΩ as seen fit."
 		(exclude_from_sim no)
 		(at 36.83 195.58 0)
 		(effects
@@ -114777,7 +114777,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -114829,6 +114829,17 @@
 		)
 		(property "Description" "Jumper, 3-pole, pins 1+2 closed/bridged"
 			(at 194.31 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 182.88 118.11 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -114914,6 +114925,17 @@
 		)
 		(property "Description" ""
 			(at 78.74 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 83.82 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -115162,6 +115184,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 226.06 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "5"
 			(uuid "74185bb1-c801-47ac-83c1-363cd8498009")
 		)
@@ -115283,6 +115316,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 238.76 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "f7c4236a-c272-4d5c-8993-f7a4422fe2a5")
 		)
@@ -115355,6 +115399,17 @@
 		)
 		(property "Description" ""
 			(at 19.05 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 20.32 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -115442,6 +115497,17 @@
 		)
 		(property "Description" "Polarized capacitor, US symbol"
 			(at 86.36 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 86.36 54.61 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -115612,6 +115678,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 251.46 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "6ae65296-e79c-469c-b685-1b3e17f4c004")
 		)
@@ -115694,6 +115771,17 @@
 		)
 		(property "Field5" "CAT8 Cable"
 			(at 208.28 59.69 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 208.28 73.66 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -115823,7 +115911,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -115884,6 +115972,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 182.88 148.59 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "3"
 			(uuid "63e876a5-d6c7-4859-9247-bad95cd08f62")
 		)
@@ -115925,7 +116024,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Note 2"
+		(property "Value" "Note 1"
 			(at 55.88 126.9999 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -115982,6 +116081,17 @@
 		)
 		(property "Sim.Pins" "1=K 2=A"
 			(at 53.34 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 53.34 125.73 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -116785,6 +116895,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 208.28 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "7ccf4b91-abe0-49d8-817b-3a343d8c6b3a")
 		)
@@ -116956,6 +117077,17 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 106.68 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "1"
@@ -117141,7 +117273,7 @@
 				)
 			)
 		)
-		(property "Field5" "Note 3"
+		(property "Field5" "Note 2"
 			(at 33.02 148.5899 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -117150,6 +117282,17 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 30.48 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "1"
@@ -117225,6 +117368,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 160.02 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
 			(at 160.02 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -117482,6 +117636,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 256.54 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "0a7354df-ef94-4410-ad3f-f111127bfd5b")
 		)
@@ -117681,6 +117846,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 82.55 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "87126c94-341f-440c-ac76-125c47890f14")
 		)
@@ -117863,7 +118039,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -117915,6 +118091,17 @@
 		)
 		(property "Description" "Jumper, 3-pole, pins 1+2 closed/bridged"
 			(at 207.01 140.97 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 195.58 140.97 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -118009,6 +118196,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 227.33 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8c160de7-0691-4fbf-8d2c-363aba3de53e")
 		)
@@ -118082,6 +118280,17 @@
 		)
 		(property "Description" ""
 			(at 161.29 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 161.29 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -118191,7 +118400,7 @@
 				)
 			)
 		)
-		(property "Field5" "Note 3"
+		(property "Field5" "Note 2"
 			(at 45.72 148.5899 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -118200,6 +118409,17 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 43.18 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "1"
@@ -118354,6 +118574,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 227.33 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
 			(at 227.33 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -118684,6 +118915,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 52.07 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "11"
 			(uuid "4f4ac7b0-6e30-4fb7-8555-3a0bfc0a26f0")
 		)
@@ -118808,6 +119050,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 227.33 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a8560cb8-7d55-4807-9694-8849b778e3a7")
 		)
@@ -118879,6 +119132,17 @@
 		)
 		(property "Description" "Inductor"
 			(at 220.98 27.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 220.98 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -119038,6 +119302,17 @@
 			)
 		)
 		(property "Description" "Polarized capacitor, US symbol"
+			(at 31.75 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
 			(at 31.75 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -119287,6 +119562,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 43.18 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "30d952e7-1683-4c95-986b-5856061e103f")
 		)
@@ -119359,6 +119645,17 @@
 		)
 		(property "Description" ""
 			(at 19.05 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 20.32 175.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -119534,6 +119831,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 194.31 27.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "bf84bea1-bfd8-4343-9833-2ec84031b9fa")
 		)
@@ -119568,7 +119876,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -119620,6 +119928,17 @@
 		)
 		(property "Description" "Jumper, 3-pole, pins 1+2 closed/bridged"
 			(at 207.01 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 195.58 110.49 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -119792,6 +120111,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 43.18 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "5c18658a-ce3f-4ee6-b5c5-5fdbc12f32f6")
 		)
@@ -119942,6 +120272,17 @@
 			)
 		)
 		(property "Description" "Polarized capacitor, US symbol"
+			(at 72.39 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
 			(at 72.39 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -120268,6 +120609,17 @@
 				)
 			)
 		)
+		(property "Digikey Part" ""
+			(at 171.45 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "5f579ba9-2631-43dd-a070-f270bbe2ac47")
 		)
@@ -120341,6 +120693,17 @@
 		)
 		(property "Description" ""
 			(at 123.19 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 115.57 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -120514,6 +120877,17 @@
 		)
 		(property "Description" ""
 			(at 123.19 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey Part" ""
+			(at 123.19 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
