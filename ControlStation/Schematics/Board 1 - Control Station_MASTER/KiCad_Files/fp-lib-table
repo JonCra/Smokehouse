@@ -1,0 +1,8 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "cramjona_customLib") (type "KiCad") (uri "C:/Users/Jonas C/Documents/KiCad/8.0/footprints/cramjona_customLib.pretty") (options "") (descr ""))
+	(lib (name "CramJ_Footprint_Lib") (type "KiCad") (uri "C:/Users/Jonas C/OneDrive/Desktop/ISU/RCET/KiCAD/CramJ_Footprint_Lib.pretty") (options "") (descr ""))
+	(lib (name "CramJ_Custom_Library_01") (type "KiCad") (uri "C:/Users/Jonas C/OneDrive/Desktop/ISU/RCET/KiCAD/CramJ_Custom_Library_01.pretty") (options "") (descr ""))
+	(lib (name "cramjona_customLib") (type "KiCad") (uri "C:/Users/Jonas C/Documents/KiCad/8.0/footprints/cramjona_customLib.pretty") (options "") (descr ""))
+	(lib (name "CramJona_FootprintLib") (type "KiCad") (uri "C:/Users/Jonas C/Documents/KiCad/CramJona_FootprintLib.pretty") (options "") (descr ""))
+)
