@@ -12,7 +12,7 @@
 ; PIC16F1788 Configuration Bit Settings
 ; Assembly source line config statements
 ; CONFIG1
-    CONFIG  FOSC = INTOSC         ; Oscillator Selection (INTOSC oscillator: I/O function on CLKIN pin)
+  CONFIG  FOSC = INTOSC         ; Oscillator Selection (INTOSC oscillator: I/O function on CLKIN pin)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
   CONFIG  PWRTE = OFF           ; Power-up Timer Enable (PWRT disabled)
   CONFIG  MCLRE = ON            ; MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
@@ -68,6 +68,16 @@ SETUP:
     	CLRF	BYTE_THREE
     DEBUG	EQU 0x78h
 	CLRF	DEBUG
+    ATTEMPT	EQU 0x79h
+	CLRF	ATTEMPT
+	
+    ; -------------------
+    ; INTERNAL OSCILLATOR SETUP
+    ; -------------------
+     BANKSEL	OSCCON
+     MOVLW	0xF0h
+     MOVWF	OSCCON
+     CLRW
 
     ; -------------------
     ; UART SETUP
@@ -143,28 +153,42 @@ SETUP:
      ; - - - - - BAUD RATE GENERATOR - - - - -
 	; DESIRED BAUD = Fosc/(X(SPBRGH:SPBRGL + 1)
 	; X = VALUE DEPENDENT ON BAUD RATE, SEE DATASHEET
-	; SPBRGH:SPBRGL = (((11.0592MHz/9600 BAUD)/16) - 1
-	; SPBRGH:SPBRGL = 71d = 47h
-	; SPBRGH = 0x00h, SPBRGL = 0x47h
+	; SPBRGH:SPBRGL = (((32MHz/9600 BAUD)/16) - 1 = 207.333d
+	; SPBRGH:SPBRGL = 207d = CFh
+	; SPBRGH = 0x00h, SPBRGL = 0xCFh
      BANKSEL	SP1BRGH
 	CLRF	SP1BRGH	    ; CLR HI-BYTE OF BAUD RATE GEN (BRG16)
      BANKSEL	SP1BRGL
-	MOVLW	0x47h	    
+	MOVLW	0xCFh
 	MOVWF	SP1BRGL
 	CLRW
     
     ; -------------------
+    ; PORTA SETUP
+    ; -------------------
+     BANKSEL	PORTA
+	CLRF	PORTA
+	
+     BANKSEL	WPUA
+	CLRF	WPUA	; DSBL PORTA WEAK PULL-UP
+
+     ; CONFIG PORTA AS INPUTS
+     BANKSEL	TRISA
+	MOVLW	0xFFh
+	MOVWF	TRISA
+	
+    ; -------------------
     ; PORTC SETUP
     ; -------------------
-    BANKSEL	PORTC
+     BANKSEL	PORTC
 	CLRF	PORTC	; CLR PORTC
 	
-    BANKSEL	WPUC
+     BANKSEL	WPUC
 	CLRF	WPUC	; DSBL PORTC WEAK PULL-UP
 	
-    BANKSEL	TRISC
+     BANKSEL	TRISC
 	; 1(TRI-STATE INPUT) / 0(OUTPUT)
-	MOVLW	10011001B
+	MOVLW	00011001B
 	MOVWF	TRISC
 	CLRW
     
@@ -240,8 +264,7 @@ CLRW
 GOTO    MAIN
     
 MAIN:
-    
-    GOTO    MAIN    ; LOOP INDEF
+    GOTO	MAIN	    ; LOOP INDEF
     
 IE_HANDLER:
     ; - - - - SAVE WORKING AND STATUS REGs - - - - -
@@ -254,17 +277,9 @@ IE_HANDLER:
     BTFSC	PIR2,3	    ; MSSP COLLISION IE?
     GOTO	MSSP_COLL   ; Y: GOTO HANDLER
     
-    BANKSEL	PIR1
-    BTFSC	PIR1,4	    ; UART Rx?
-    GOTO	SER_RX	    ; Y: GOTO HANDLER
-    
     GOTO	LEAVEISR
     
 MSSP_COLL:
-    ; DO STUFF
-    GOTO	LEAVEISR
-    
-SER_RX:
     ; DO STUFF
     GOTO	LEAVEISR
     
@@ -278,5 +293,23 @@ LEAVEISR:
     
 ; - - - - - SUBROUTINES - - - - -
 SEND_DATA:
-    ; - - - - - SEND HANDSHAKE FIRST, THEN DATA - - - - -
+    BANKSEL	INTCON
+    BCF		INTCON,7    ; DSBL GLBL IEs
     
+    BANKSEL	TX1REG
+    MOVWF	TX1REG	    ; SEND DATA
+    
+    BANKSEL	TX1STA
+    BTFSC	TX1STA,1    ; DATA Tx'D?
+    GOTO	$-1	    ; N: TEST AGAIN
+    RETURN
+    
+;    ; TXREG NOT EMPTY
+;    INCF	ATTEMPT
+;    MOVF	ATTEMPT,W
+;    XORLW	0000011B
+;    BANKSEL	STATUS
+;    BTFSC
+;    GOTO	$-1	    ; N: TEST AGAIN
+    
+    RETURN
