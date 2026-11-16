@@ -12,7 +12,7 @@
 ; PIC16F1788 Configuration Bit Settings
 ; Assembly source line config statements
 ; CONFIG1
-  CONFIG  FOSC = HS             ; Oscillator Selection (HS Oscillator, High-speed crystal/resonator connected between OSC1 and OSC2 pins)
+    CONFIG  FOSC = INTOSC         ; Oscillator Selection (INTOSC oscillator: I/O function on CLKIN pin)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
   CONFIG  PWRTE = OFF           ; Power-up Timer Enable (PWRT disabled)
   CONFIG  MCLRE = ON            ; MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
@@ -24,12 +24,12 @@
   CONFIG  FCMEN = ON            ; Fail-Safe Clock Monitor Enable (Fail-Safe Clock Monitor is enabled)
 
 ; CONFIG2
-  CONFIG  WRT = BOOT            ; Flash Memory Self-Write Protection (000h to 1FFh write protected, 200h to 1FFFh may be modified by EECON control)
+  CONFIG  WRT = OFF             ; Flash Memory Self-Write Protection (Write protection off)
   CONFIG  VCAPEN = OFF          ; Voltage Regulator Capacitor Enable bit (Vcap functionality is disabled on RA6.)
-  CONFIG  PLLEN = OFF           ; PLL Enable (4x PLL disabled)
+  CONFIG  PLLEN = ON            ; PLL Enable (4x PLL enabled)
   CONFIG  STVREN = ON           ; Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
   CONFIG  BORV = LO             ; Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
-  CONFIG  LPBOR = ON            ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is enabled)
+  CONFIG  LPBOR = OFF           ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is disabled)
   CONFIG  DEBUG = OFF           ; In-Circuit Debugger Mode (In-Circuit Debugger disabled, ICSPCLK and ICSPDAT are general purpose I/O pins)
   CONFIG  LVP = ON              ; Low-Voltage Programming Enable (Low-voltage programming enabled)
 
@@ -58,13 +58,15 @@ SETUP:
 	MOVLW	0x24h
 	MOVWF	HANDSHAKE	; INIT AND LOAD HANDSHAKE VALUE INTO REG
 	CLRW
-    BYTE_ONE	EQU 0x74h
+    DEV_ADDR	EQU 0x74h
+	CLRF	DEV_ADDR
+    BYTE_ONE	EQU 0x75h
 	CLRF	BYTE_ONE
-    BYTE_TWO	EQU 0x75h
+    BYTE_TWO	EQU 0x76h
     	CLRF	BYTE_TWO
-    BYTE_THREE	EQU 0x76h
+    BYTE_THREE	EQU 0x77h
     	CLRF	BYTE_THREE
-    DEBUG	EQU 0x77h
+    DEBUG	EQU 0x78h
 	CLRF	DEBUG
 
     ; -------------------

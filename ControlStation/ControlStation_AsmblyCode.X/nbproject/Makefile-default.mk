@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=UART_Test.s
+SOURCEFILES_QUOTED_IF_SPACED=ControlTXer.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/UART_Test.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/UART_Test.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/ControlTXer.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/ControlTXer.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/UART_Test.o
+OBJECTFILES=${OBJECTDIR}/ControlTXer.o
 
 # Source Files
-SOURCEFILES=UART_Test.s
+SOURCEFILES=ControlTXer.s
 
 
 
@@ -89,21 +89,21 @@ FINAL_IMAGE_NAME_MINUS_EXTENSION=${DISTDIR}/ControlStation_AsmblyCode.X.${IMAGE_
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: pic-as-assembler
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/UART_Test.o: UART_Test.s  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/ControlTXer.o: ControlTXer.s  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/UART_Test.o 
+	@${RM} ${OBJECTDIR}/ControlTXer.o 
 	${MP_AS} -mcpu=PIC16F1788 -c \
-	-o ${OBJECTDIR}/UART_Test.o \
-	UART_Test.s \
+	-o ${OBJECTDIR}/ControlTXer.o \
+	ControlTXer.s \
 	 -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
 	
 else
-${OBJECTDIR}/UART_Test.o: UART_Test.s  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/ControlTXer.o: ControlTXer.s  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/UART_Test.o 
+	@${RM} ${OBJECTDIR}/ControlTXer.o 
 	${MP_AS} -mcpu=PIC16F1788 -c \
-	-o ${OBJECTDIR}/UART_Test.o \
-	UART_Test.s \
+	-o ${OBJECTDIR}/ControlTXer.o \
+	ControlTXer.s \
 	  -mdfp="${DFP_DIR}/xc8"  -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
 	
 endif
