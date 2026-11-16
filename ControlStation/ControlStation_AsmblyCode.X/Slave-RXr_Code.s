@@ -12,7 +12,7 @@
 ; PIC16F1788 Configuration Bit Settings
 ; Assembly source line config statements
 ; CONFIG1
-    CONFIG  FOSC = INTOSC         ; Oscillator Selection (INTOSC oscillator: I/O function on CLKIN pin)
+  CONFIG  FOSC = HS             ; Oscillator Selection (HS Oscillator, High-speed crystal/resonator connected between OSC1 and OSC2 pins)
   CONFIG  WDTE = OFF            ; Watchdog Timer Enable (WDT disabled)
   CONFIG  PWRTE = OFF           ; Power-up Timer Enable (PWRT disabled)
   CONFIG  MCLRE = ON            ; MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
@@ -24,12 +24,12 @@
   CONFIG  FCMEN = ON            ; Fail-Safe Clock Monitor Enable (Fail-Safe Clock Monitor is enabled)
 
 ; CONFIG2
-  CONFIG  WRT = OFF             ; Flash Memory Self-Write Protection (Write protection off)
+  CONFIG  WRT = BOOT            ; Flash Memory Self-Write Protection (000h to 1FFh write protected, 200h to 1FFFh may be modified by EECON control)
   CONFIG  VCAPEN = OFF          ; Voltage Regulator Capacitor Enable bit (Vcap functionality is disabled on RA6.)
-  CONFIG  PLLEN = ON            ; PLL Enable (4x PLL enabled)
+  CONFIG  PLLEN = OFF           ; PLL Enable (4x PLL disabled)
   CONFIG  STVREN = ON           ; Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
   CONFIG  BORV = LO             ; Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
-  CONFIG  LPBOR = OFF           ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is disabled)
+  CONFIG  LPBOR = ON            ; Low Power Brown-Out Reset Enable Bit (Low power brown-out is enabled)
   CONFIG  DEBUG = OFF           ; In-Circuit Debugger Mode (In-Circuit Debugger disabled, ICSPCLK and ICSPDAT are general purpose I/O pins)
   CONFIG  LVP = ON              ; Low-Voltage Programming Enable (Low-voltage programming enabled)
 
