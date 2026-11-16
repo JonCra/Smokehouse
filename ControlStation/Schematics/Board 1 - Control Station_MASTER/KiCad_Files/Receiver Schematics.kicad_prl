@@ -4,7 +4,9 @@
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
-    "hidden_nets": [],
+    "hidden_nets": [
+      "GND"
+    ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
     "opacity": {
@@ -13,7 +15,7 @@
       "shapes": 1.0,
       "tracks": 1.0,
       "vias": 1.0,
-      "zones": 0.5799999833106995
+      "zones": 1.0
     },
     "prototype_zone_fills": false,
     "selection_filter": {
@@ -21,7 +23,7 @@
       "footprints": true,
       "graphics": true,
       "keepouts": true,
-      "lockedItems": true,
+      "lockedItems": false,
       "otherItems": true,
       "pads": true,
       "text": true,
@@ -53,8 +55,8 @@
       "board_outline_area",
       "ly_points"
     ],
-    "visible_layers": "ffffffff_ffffffff_ffffffff_fffdffff",
-    "zone_display_mode": 1
+    "visible_layers": "ffffffff_ffffffff_fffffff7_ffffffff",
+    "zone_display_mode": 0
   },
   "git": {
     "integration_disabled": false,
@@ -63,7 +65,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "Control Station Schematics.kicad_prl",
+    "filename": "Receiver Schematics.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {
@@ -92,16 +94,16 @@
       9
     ],
     "col_widths": [
-      222,
-      207,
-      136,
+      77,
+      80,
+      113,
       92,
-      136,
-      136,
-      136,
       98,
-      136,
-      136
+      115,
+      100,
+      98,
+      49,
+      50
     ],
     "custom_group_rules": [],
     "expanded_rows": [],

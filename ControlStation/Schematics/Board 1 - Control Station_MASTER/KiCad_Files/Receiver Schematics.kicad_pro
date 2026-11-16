@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 1.65,
-          "width": 3.43
+          "drill": 3.81,
+          "height": 6.35,
+          "width": 6.35
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -55,11 +55,11 @@
           "corner_radius": 0.0,
           "corner_smoothing": 0,
           "fill_mode": 1,
-          "hatch_gap": 1.524,
+          "hatch_gap": 1.5,
           "hatch_orientation": 0.0,
           "hatch_smoothing_level": 0,
           "hatch_smoothing_value": 0.1,
-          "hatch_thickness": 1.016,
+          "hatch_thickness": 1.0,
           "min_clearance": 0.508,
           "min_island_area": 9.99999999996,
           "min_thickness": 0.254,
@@ -112,9 +112,9 @@
         "microvia_drill_out_of_range": "error",
         "mirrored_text_on_front_layer": "warning",
         "missing_courtyard": "ignore",
-        "missing_footprint": "warning",
+        "missing_footprint": "error",
         "missing_tuning_profile": "warning",
-        "net_conflict": "warning",
+        "net_conflict": "error",
         "nonmirrored_text_on_back_layer": "warning",
         "npth_inside_courtyard": "error",
         "padstack": "warning",
@@ -150,11 +150,11 @@
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
-        "min_hole_clearance": 0.25,
+        "min_hole_clearance": 0.254,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
-        "min_microvia_drill": 0.1,
-        "min_resolved_spokes": 2,
+        "min_microvia_drill": 0.127,
+        "min_resolved_spokes": 1,
         "min_silk_clearance": 0.0,
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
@@ -456,18 +456,18 @@
       "bus_to_net_conflict": "error",
       "different_unit_footprint": "error",
       "different_unit_net": "error",
-      "duplicate_reference": "ignore",
+      "duplicate_reference": "error",
       "duplicate_sheet_names": "error",
       "endpoint_off_grid": "warning",
       "extra_units": "error",
       "field_name_whitespace": "warning",
       "footprint_filter": "ignore",
       "footprint_link_issues": "warning",
-      "four_way_junction": "warning",
+      "four_way_junction": "ignore",
       "ground_pin_not_ground": "warning",
       "hier_label_mismatch": "error",
       "isolated_pin_label": "warning",
-      "label_dangling": "ignore",
+      "label_dangling": "warning",
       "label_multiple_wires": "warning",
       "lib_symbol_issues": "warning",
       "lib_symbol_mismatch": "warning",
@@ -480,7 +480,7 @@
       "no_connect_connected": "warning",
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
-      "pin_not_driven": "warning",
+      "pin_not_driven": "error",
       "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
       "same_local_global_label": "warning",
@@ -488,7 +488,7 @@
       "similar_labels": "warning",
       "similar_power": "warning",
       "simulation_model_issue": "ignore",
-      "single_global_label": "warning",
+      "single_global_label": "ignore",
       "stacked_pin_name": "warning",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
@@ -499,13 +499,11 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [
-      "cramjona_customLib"
-    ],
+    "pinned_footprint_libs": [],
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "Control Station Schematics.kicad_pro",
+    "filename": "Receiver Schematics.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -535,37 +533,32 @@
         "diff_pair_width": 0.2,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "POWER",
+        "name": "Power",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.762,
-        "tuning_profile": "",
-        "via_diameter": 0.889,
-        "via_drill": 0.381
+        "tuning_profile": "11.81102 mils",
+        "via_diameter": 0.6,
+        "via_drill": 0.3
       }
     ],
     "meta": {
       "version": 5
     },
     "net_colors": {
-      "+12V": "rgb(0, 0, 255)",
-      "+5V": "rgb(255, 0, 0)",
-      "GND": "rgb(0, 255, 0)"
+      "+12V": "rgb(0, 72, 0)",
+      "+5V": "rgb(0, 255, 0)"
     },
     "netclass_assignments": null,
     "netclass_patterns": [
       {
-        "netclass": "POWER",
-        "pattern": "GND"
-      },
-      {
-        "netclass": "POWER",
+        "netclass": "Power",
         "pattern": "+12V"
       },
       {
-        "netclass": "POWER",
-        "pattern": "+5V"
+        "netclass": "Power",
+        "pattern": "GND"
       },
       {
         "netclass": "Default",
@@ -574,6 +567,10 @@
       {
         "netclass": "Default",
         "pattern": "Net*"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "+5V"
       }
     ]
   },
@@ -581,7 +578,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "ReceiverPCB_FabFiles/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
@@ -600,8 +597,8 @@
       "field_delimiter": ",",
       "keep_line_breaks": false,
       "keep_tabs": false,
-      "name": "---",
-      "ref_delimiter": ", ",
+      "name": "CSV",
+      "ref_delimiter": ",",
       "ref_range_delimiter": "",
       "string_delimiter": "\""
     },
@@ -634,7 +631,7 @@
           "show": true
         },
         {
-          "group_by": false,
+          "group_by": true,
           "label": "DNP",
           "name": "${DNP}",
           "show": false
@@ -643,13 +640,13 @@
           "group_by": false,
           "label": "Exclude from BOM",
           "name": "${EXCLUDE_FROM_BOM}",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
           "label": "Exclude from Board",
           "name": "${EXCLUDE_FROM_BOARD}",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -661,7 +658,7 @@
           "group_by": false,
           "label": "Exclude from Position Files",
           "name": "${EXCLUDE_FROM_POS_FILES}",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -670,7 +667,7 @@
           "show": true
         },
         {
-          "group_by": true,
+          "group_by": false,
           "label": "Footprint",
           "name": "Footprint",
           "show": true
@@ -679,7 +676,7 @@
           "group_by": false,
           "label": "Datasheet",
           "name": "Datasheet",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -695,20 +692,8 @@
         },
         {
           "group_by": false,
-          "label": "Field6",
-          "name": "Field6",
-          "show": false
-        },
-        {
-          "group_by": false,
           "label": "Field5",
           "name": "Field5",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Field7",
-          "name": "Field7",
           "show": false
         }
       ],
@@ -717,7 +702,7 @@
       "include_excluded_from_bom": true,
       "name": "",
       "sort_asc": true,
-      "sort_field": "${ITEM_NUMBER}"
+      "sort_field": "Reference"
     },
     "bus_aliases": {},
     "connection_grid_size": 50.0,
@@ -748,14 +733,6 @@
     "meta": {
       "version": 1
     },
-    "ngspice": {
-      "fix_include_paths": true,
-      "meta": {
-        "version": 0
-      },
-      "model_mode": 4,
-      "workbook_filename": ""
-    },
     "page_layout_descr_file": "kicad-embed://ISU RCET 33370 - Project Title Block v8_0.kicad_wks",
     "plot_directory": "",
     "reuse_designators": true,
@@ -763,17 +740,17 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "Control Station Schematics.kicad_sch",
+        "filename": "Receiver Schematics.kicad_sch",
         "name": "Root",
-        "uuid": "c9070557-ecef-4e5d-86c6-a59ab921ae00"
+        "uuid": "aebec1e7-4baf-4e38-bfc8-392edfbb06de"
       }
     ],
-    "used_designators": "U1-9,JP1-10,0101020101011,010103010101011,01010301011,P1-4,010102010101010101010101011,C1-22,D1-9,#PWR1-45,01010201020101011,01010301010101010101021,1,01010301010101010101011,010102010101010101011,010102010101010101011\\-2,0101020102010101010101011,010101011,R1-9,0101010101011,Y1-3,0101020102010101011,011,01010201020101010101011,0101011,010103010101010101010101011,p1,p3,p5-7,0101020101010101010101011,010103010101010101010101021,0101020101010101010101021,010102010201010101011,01011,010101010101010101011,010103010101010101011\\-3,J1-11,01011\\-4,01010201021,0101021,010103011,010103010101010101011,0101020101010101011,0101031,010102010101011,01010301010101011,010102011\\-2,01010101010101010101011,01010201010101010101021,01010301010101010101031,0101030101011,01010201011,010102010201010101010101011,01010101011,01010201010101011,0101030101010101011,0101020102011,010102010201011,010101010101011,01010101010101011,0101010101010101011,0101030101010101010101011\\-2,01010201010101010101011\\-2,0101030101010101010101011,01010201010101010101011,L1-2,01010201010101010101010101011,01010201020101010101010101011,01010301010101010101010101011,01010301010101010101010102011,0101020101010101010101010101011\\-2,0101020102010101010101010101011,0101030101010101010101010101011,0101030101010101010101010201011,0101030101010101010103011,010102010101010101010101010101021,P01A1-16",
+    "used_designators": "#PWR1-38,D1-2,L1-2,C1-14,C19-22,J1-11,JP1-6,P2,P01A9-10,P01A13,R1-8,U1-7,U9,Y1-2",
     "variants": []
   },
   "sheets": [
     [
-      "c9070557-ecef-4e5d-86c6-a59ab921ae00",
+      "aebec1e7-4baf-4e38-bfc8-392edfbb06de",
       "Root"
     ]
   ],
